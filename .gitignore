@@ -33,6 +33,7 @@ mariadb/*
 !mariadb/docker-compose.yaml
 psql/*
 !psql/docker-compose.yml
+!psql/docker_bash.sh
 psql-test*
 rustdesk/*
 invoiceninja/*
