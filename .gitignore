@@ -12,7 +12,7 @@ collabora/*
 traefik/*
 !traefik/docker-compose.yaml
 paperless/*
-!paperless/docker-compose_clean.yaml
+!paperless/docker-compose.yaml
 dashy/*
 !dashy/docker-compose.yaml
 gitea/*

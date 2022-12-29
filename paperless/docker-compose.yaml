@@ -78,10 +78,13 @@ services:
       PAPERLESS_CONVERT_MEMORY_LIMIT: 32
       PAPERLESS_TIME_ZONE: Europe/Berlin
       PAPERLESS_URL: https://paperless.jomer.dev
-      PAPERLESS_SECRET_KEY: <GENERATE KEY>
+      PAPERLESS_SECRET_KEY_FILE: /run/secrets/secret_key
       # PAPERLESS_TRASH_DIR: “media/trash”
-      PAPERLESS_DBPASS: '<GENERATE PASSWORD>'
+      PAPERLESS_DBPASS_FILE: /run/secrets/db-password
       PAPERLESS_OCR_LANGUAGE: deu
+    secrets:
+      - db-password
+      - secret_key
     labels:
       traefik.enable: true
       traefik.http.routers.paperless.rule: Host(`paperless.jomer.dev`)
@@ -125,3 +128,11 @@ networks:
         name: paperless_frontend
     paperless_backend:
         name: paperless_backend
+
+secrets:
+    db-password:
+        file: ../.secrets/paperless/dbpass
+        name: db-password
+    secret_key:
+        file: ../.secrets/paperless/secret_key
+        name: secret_key

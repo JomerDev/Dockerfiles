@@ -26,13 +26,14 @@ services:
             - "--certificatesresolvers.letsencrypt.acme.email=jonathan.gilmer@posteo.de"
             - "--certificatesresolvers.letsencrypt.acme.storage=/letsencrypt/acme.json"
             - "--providers.file.filename=/configs/proxmox-router.yaml"
+            - "--providers.docker.endpoint=tcp://socket-proxy:2375"
         ports:
             - "80:80"
             - "443:443"
         volumes:
             - "./letsencrypt:/letsencrypt"
             - "./configs:/configs"
-            - "/var/run/docker.sock:/var/run/docker.sock:ro"
+            # - "/var/run/docker.sock:/var/run/docker.sock:ro"
         labels:
             traefik.enable: true
             traefik.http.routers.traefik.rule: Host(`traefik.jomer.dev`)
@@ -61,8 +62,25 @@ services:
             - dashy_frontend
             - ldap_frontend
             - authelia_frontend
+            - socket_proxy
+    
+    socket-proxy:
+        image: tecnativa/docker-socket-proxy
+        container_name: "socket-proxy"
+        restart: unless-stopped
+        volumes:
+            - /var/run/docker.sock:/var/run/docker.sock:ro
+        environment:
+            NETWORKS: 1
+            SERVICES: 1
+            TASKS: 1
+            CONTAINERS: 1
+        networks:
+            - socket_proxy
 
 networks:
+    socket_proxy:
+        name: socket_proxy
     nextcloud_frontend:
         name: nextcloud_frontend
     pihole_frontend:
